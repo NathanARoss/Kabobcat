@@ -24,11 +24,8 @@ function loggedInHandler(profile) {
     var person = new blockstack.Person(profile);
     if (person._profile.username) {
         usernameDisplay.innerText = person._profile.username;
-    } else {
-        usernameDisplay.style.display = "none";
+        console.log(person._profile);
     }
-
-    console.log(person);
 }
 
 function signIn() {
@@ -44,3 +41,12 @@ function signIn() {
 }
 
 signIn();
+
+
+
+for (const row of document.getElementsByClassName("food-entry")) {
+    row.addEventListener("click", function(event) {
+        this.classList.toggle("flipped");
+        event.preventDefault();
+    })
+}

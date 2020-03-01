@@ -9,7 +9,7 @@ const https = require('https');
 
 const mongodb = require('mongodb').MongoClient;
 const ObjectId = require('mongodb').ObjectId;
-const uri = `mongodb+srv://admin:ORKeaIb0LJtxSDmT@kabobcat-dhmqz.gcp.mongodb.net/test?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://admin:@kabobcat-dhmqz.gcp.mongodb.net/test?retryWrites=true&w=majority`;
 
 const app = express();
 
@@ -60,8 +60,8 @@ mongodb.connect(uri, {
                     path: '/v1/geofences',
                     method: 'GET',
                     headers: {
-                        // 'Authorization': 'prj_live_sk_839be5f8b1c16f3df252c567eb60c04bc82f1ea9'
-                        'Authorization': 'prj_test_sk_9db46719ded3f185c0aaf3dfd116e91407554ff0'
+                        // 'Authorization': ''
+                        'Authorization': ''
                     }
                 }
                 // Get the Geo Fences and put the maps into the HTML.
@@ -77,7 +77,7 @@ mongodb.connect(uri, {
                         let simplifiedData = [];
                         for (const entry of data.geofences) {
                             simplifiedData.push({
-                                coords: entry.geometry.coordinates.flat(),
+                                coords: entry.geometry.coordinates[0],
                                 description: entry.description
                             })
                         }
@@ -104,18 +104,24 @@ mongodb.connect(uri, {
                                     path += "|" + coord[1] + "," + coord[0];
                                 }
                    
-                                map = `<img class="food-map" src="https://maps.googleapis.com/maps/api/staticmap?size=300x300&key=AIzaSyDvpyVp8M7ZII_yJVwL0fkfZ2As-L9M-94&${path}">`
+                                map = `<img class="food-map" src="https://maps.googleapis.com/maps/api/staticmap?size=300x300&key=-L9M-94&${path}">`
                             }
 
 
                             entriesHtml +=
                             `<div class="food-entry">
+                            <div class="flip-card-inner">
+                            <div class="flip-card-front">
                             <div class="food-image-container"><img class="food-image" src="/image?_id=${entry._id}"></div>
                             <div class="food-description"><h1 class="food-type">${entry.foodType}</h1>
                             <p class="time-and-location">${new Date(entry.datetime).toLocaleDateString("en-US", dateFormat)} @ ${entry.location}</p>
                             <p class="food-provider">From: ${entry.provider}</p>
                             <p class="poster">${entry.username}</p>
-                            </div>${map}</div>`;
+                            </div>${map}
+                            </div>
+                            <div class="flip-card-back">Back Side</div>
+                            </div>
+                            </div>`;
                         });
 
                         htmlContent = htmlContent.replace("$HOME_LIST", entriesHtml);
@@ -141,8 +147,8 @@ mongodb.connect(uri, {
             path: '/v1/geofences',
             method: 'GET',
             headers: {
-                // 'Authorization': 'prj_live_sk_839be5f8b1c16f3df252c567eb60c04bc82f1ea9'
-                'Authorization': 'prj_test_sk_9db46719ded3f185c0aaf3dfd116e91407554ff0'
+                // 'Authorization': ''
+                'Authorization': ''
             }
         }
 
@@ -203,31 +209,10 @@ mongodb.connect(uri, {
 
             res.write(htmlContent);
             res.end();
-
-            // const collection = db.collection('Submissions');
-
-            // let msglist = '';
-            // collection.find().toArray((err, dbRecords) => {
-            //     if (err) {
-            //         throw err;
-            //     }
-
-            //     dbRecords.forEach((msg) => {
-            //         msglist += `<h1>${msg.name}</h1><p>${msg.message}</p><p><em>${msg.datetime}</em></p>`;
-            //     });
-
-            //     res.write(msglist);
-            //     res.end();
-            // });
         });
     });
 
     app.post('/submit', upload.single('image'), (req, res) => {
-        // console.log({
-        //     name: req.body.name,
-        //     message: req.body.message
-        // });
-
         const collection = db.collection('Submissions');
         const msg = {
             foodType: req.body["food-type"],
