@@ -1,0 +1,10 @@
+ {
+   "name": "Kabobcat",
+   "start_url": "https://kabobcat.tech/",
+   "description": "Food waste reduction service",
+   "icons": [{
+     "src": "/public/bobcat.png",
+     "sizes": "192x192",
+     "type": "image/png"
+   }]
+ }

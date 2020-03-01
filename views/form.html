@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Food Submission</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body>
+    <h2>Create a new post</h2>
+    <form method="POST" enctype="multipart/form-data" action="/submit">
+      <div>
+        <input type="text" name="name" placeholder="Name">
+      </div>
+      <div>
+        <textarea name="message" placeholder="Message"></textarea>
+      </div>
+      <div>
+        <input type="file" id="image" name="image" accept="image/*">
+      </div>
+      <div>
+        <button type="submit">Submit</button>
+      </div>
+    </form>
+  </body>
+</html>
