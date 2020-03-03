@@ -75,6 +75,7 @@ footer {
     border-radius: 25px;
     margin: 20px;
     box-shadow:0 0 18px rgba(0, 0, 0, 0.6);
+    background-color: #bbb;
 }
 
 .food-entry {
@@ -111,14 +112,22 @@ footer {
   
   .flip-card-front {
     display: flex;
-    background-color: #bbb;
+    background-color: #eee;
     color: black;
   }
   
   .flip-card-back {
-    background-color: #2980b9;
+    background-color: darkred;
     color: white;
     transform: rotateX(180deg);
+    box-sizing: border-box;
+    padding: 30px;
+  }
+
+  .delete-link {
+      padding: 1em;
+      background-color: black;
+      border-radius: 8px;
   }
 
 /* .front-side {
@@ -295,15 +304,15 @@ header a {
         position: relative;
     }
     .food-image {
-        width: 50%;
-        height: 90px;
+        min-width: 100%;
+        min-height: 100%;
     }
     .food-entry {
-        height: 250px;
+        height: 300px;
     }
     .food-map {
         min-width: 50%;
-        min-height: 90px;
+        min-height: 140px;
         border-top-right-radius: 25px;
         border-bottom-left-radius: 0;
         position: absolute;
@@ -313,17 +322,17 @@ header a {
     }
    .food-image-container {
        position: absolute;
-       width: 50%;
+       min-width: 50%;
        top: 0;
        left: 0;
-       height: 90px;
+       min-height: 140px;
        overflow: hidden;
        text-align: center;
        border-top-left-radius: 25px;
    }
    .food-description {
        position: absolute;
-       top: 90px;
-       width: 100%;
+       top: 140px;
+       width: calc(100% - 28px);
    }
 }

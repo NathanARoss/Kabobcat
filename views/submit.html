@@ -2,84 +2,122 @@
 <html>
 
 <head>
-  <meta charset="UTF-8">
-  <title>Food Submission</title>
-  <link rel="stylesheet" href="/public/site-wide.css">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Food Submission</title>
+    <link rel="stylesheet" href="/public/site-wide.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    span,
-    input {
-      display: inline-block;
-      margin: 0.5em 0;
-    }
+    <style>
+        span,
+        input {
+            display: inline-block;
+            margin: 0.5em 0;
+        }
 
-    span {
-      width: 8em;
-    }
+        span {
+            width: 8em;
+        }
 
-    input {
-      width: calc(100% - 7em - 60px);
-    }
+        input {
+            width: calc(100% - 7em - 60px);
+        }
 
-    input[type=file] {
-      width: calc(100% - 7em);
-    }
+        input[type=file] {
+            width: calc(100% - 7em);
+        }
 
-    input[type=submit] {
-      width: 6em;
-      float: right;
-    }
+        input[type=submit] {
+            width: 6em;
+            float: right;
+        }
 
-    #title {
-      margin: 0;
-    }
+        #title {
+            margin: 0;
+        }
 
-    @media (max-width: 499px) {
+        @media (max-width: 499px) {
 
-      span,
-      input {
-        display: block;
-        width: 100%;
-        margin: 0;
-        box-sizing: border-box;
-      }
+            span,
+            input {
+                display: block;
+                width: 100%;
+                margin: 0;
+                box-sizing: border-box;
+            }
 
-      input {
-        margin-bottom: 1em;
-      }
-    }
-  </style>
+            input {
+                margin-bottom: 1em;
+            }
+        }
+
+        #viewfilder {
+            width: 100%;
+            position: relative;
+        }
+
+        #video {
+            width: 100%;
+            height: 100%;
+        }
+
+        #video-frame {
+            display: none;
+        }
+
+        #capture-button {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 50px;
+            margin: 0 auto;
+            border: none;
+            background: url(/public/camera-24px.svg) center;
+            background-size: cover;
+        }
+
+        input#photo-upload {
+            display: none;
+        }
+    </style>
 </head>
 
 <body>
-  <header class="horizontal-flex">
-    <a href="/"><img id="bobcat" src="/public/bobcat.svg"/></a>
-    <div class="grow">
-        <div class="horizontal-flex">
-            <a href="/"></a><h1 id="site-title">Kabobcat</h1></a>
+    <header class="horizontal-flex">
+        <a href="/"><img id="bobcat" src="/public/bobcat.svg" /></a>
+        <div class="grow">
+            <div class="horizontal-flex">
+                <a href="/"></a>
+                <h1 id="site-title">Kabobcat</h1></a>
+            </div>
+            <h4 id="sub-header">&nbsp;UC Merced's aggregated list of left-over food on campus.</h4>
         </div>
-        <h4 id="sub-header">&nbsp;UC Merced's aggregated list of left-over food on campus.</h4>
-    </div>
-</header>
-  <main class="main-content">
-    <h2 id="title">Create a new post</h2>
+    </header>
+    <main class="main-content">
+        <video id="video" playsinline>Video not available.</video>
+        <div id="viewfilder">
+            <canvas id="video-frame"></canvas>
+            <button id="capture-button"></button>
+        </div>
 
-    <img id="view-finder">
+        <h2 id="title">Create a new post</h2>
 
-    <form method="POST" enctype="multipart/form-data" action="/submit">
-      <span>Food Type: </span><input type="text" name="food-type" placeholder="Pizza">
-      <span>Food Provider: </span><input type="text" name="food-provider" placeholder="You">
-      <span>Location: </span><input type="text" name="location" placeholder="SSB 160">
-      <input id="username" name="username" style="display: none">
-      <span>Time: </span><input type="datetime-local" name="datetime" placeholder="12:00 PM" value="$CURRENT_DATETIME">
-      <input type="submit">
-      <input type="file" id="image" name="image" accept="image/*">
-    </form>
-  </main>
+        <form method="POST" enctype="multipart/form-data" action="/submit">
+            <span>Food Type: </span><input type="text" name="food-type" placeholder="Pizza">
+            <span>Food Provider: </span><input type="text" name="food-provider" placeholder="You">
+            <span>Location: </span><input type="text" name="location" placeholder="SSB 160">
+            <input id="username" name="username" style="display: none">
+            <input id="viewfilder-data" name="viewfilder-data" style="display: none">
+            <span>Time: </span><input type="datetime-local" name="datetime" placeholder="12:00 PM"
+                value="$CURRENT_DATETIME">
+            <input type="submit">
+            <input type="file" id="image" name="image" accept="image/*">
+        </form>
+    </main>
 
-  <script src="/public/blockstack.js"></script>
-  <script src="/public/submit.js"></script>
+    <script src="/public/blockstack.js"></script>
+    <script src="/public/submit.js"></script>
 </body>
 
 </html>

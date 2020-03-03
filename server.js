@@ -16,7 +16,6 @@ const app = express();
 const upload = multer({
     storage: multer.memoryStorage()
 });
-// var redirectToHTTPS = require('express-http-to-https').redirectToHTTPS
 
 const dateFormat = {
     weekday: 'short',
@@ -30,8 +29,15 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 
-// Don't redirect if the hostname is `localhost:port` or the route is `/insecure`
-// app.use(redirectToHTTPS([/localhost:(\d{4})/], [/\/insecure/], 301));
+// app.use (function (req, res, next) {
+//     if (req.secure || req.hostname === "localhost") {
+//             // request was via https, so do no special handling
+//             next();
+//     } else {
+//             // request was via http, so redirect to https
+//             res.redirect('https://' + req.headers.host + req.url);
+//     }
+// });
 
 mongodb.connect(uri, {
     useNewUrlParser: true,
@@ -98,13 +104,16 @@ mongodb.connect(uri, {
                                 }
 
                                 const building = simplifiedData.find(x => x.description.includes(buildingAbbreviation));
-                                let path = "path=color:0xFF6347FF|weight:5|fillcolor:0xFFD70050"
 
-                                for (const coord of building.coords) {
-                                    path += "|" + coord[1] + "," + coord[0];
+                                if (building) {
+                                    let path = "path=color:0xFF6347FF|weight:5|fillcolor:0xFFD70050"
+    
+                                    for (const coord of building.coords) {
+                                        path += "|" + coord[1] + "," + coord[0];
+                                    }
+                       
+                                    map = `<img class="food-map" src="https://maps.googleapis.com/maps/api/staticmap?size=300x300&key=-L9M-94&${path}">`
                                 }
-                   
-                                map = `<img class="food-map" src="https://maps.googleapis.com/maps/api/staticmap?size=300x300&key=-L9M-94&${path}">`
                             }
 
 
@@ -119,7 +128,7 @@ mongodb.connect(uri, {
                             <p class="poster">${entry.username}</p>
                             </div>${map}
                             </div>
-                            <div class="flip-card-back">Back Side</div>
+                            <div class="flip-card-back"><a class="delete-link" href="/delete?_id=${entry._id}">Delete</a></div>
                             </div>
                             </div>`;
                         });
@@ -147,8 +156,6 @@ mongodb.connect(uri, {
             path: '/v1/geofences',
             method: 'GET',
             headers: {
-                // 'Authorization': ''
-                'Authorization': ''
             }
         }
 
@@ -200,6 +207,21 @@ mongodb.connect(uri, {
             } else {
                 res.send(entry.imageData.buffer);
             }
+        });
+    });
+
+    app.get('/delete', (req, res) => {
+        const collection = db.collection('Submissions');
+        console.log("/delete?_id=" + req.query._id)
+        collection.removeOne({
+            "_id": new ObjectId(req.query._id)
+        }, (err, entry) => {
+            if (err) {
+                console.error(err);
+                res.end();
+            }
+            
+            res.sendFile(path.join(__dirname, '/views/deletion-confirmed.html'));
         });
     });
 
